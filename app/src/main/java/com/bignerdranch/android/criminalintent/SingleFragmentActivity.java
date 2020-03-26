@@ -1,27 +1,26 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.os.Bundle;
+public abstract class SingleFragmentActivity extends FragmentActivity {
+    protected abstract Fragment createFragment();
 
-public class CrimeActivity extends /*FragmentActivity*/ SingleFragmentActivity{
-    //implementation before SingleFragmentActivity, using only one fragment.
-/*    @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
-
         //getSupportFragmentManager() is used because you calling androidx
         // library, if it was internal library it would be just
         // getFragmentManager()
         FragmentManager fm = getSupportFragmentManager();
-        //When you need to retrieve the CrimeFragment from the FragmentManager
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null){
-            fragment = new CrimeFragment(); //<---------
+            fragment = createFragment();
             //"create a new fragment transaction, include one add operation
             // in it, and then commit it."
             fm.beginTransaction()
@@ -30,9 +29,5 @@ public class CrimeActivity extends /*FragmentActivity*/ SingleFragmentActivity{
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
-    }*/
-    @Override
-    protected Fragment createFragment(){
-        return new CrimeFragment();
     }
 }
