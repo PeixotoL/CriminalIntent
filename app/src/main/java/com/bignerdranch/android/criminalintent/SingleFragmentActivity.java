@@ -1,17 +1,23 @@
 package com.bignerdranch.android.criminalintent;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class SingleFragmentActivity extends FragmentActivity {
+    private static final String TAG = "CrimeActivity";
+
     protected abstract Fragment createFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "SingleFragmentActivity - onCreate ");
         setContentView(R.layout.activity_fragment);
         //getSupportFragmentManager() is used because you calling androidx
         // library, if it was internal library it would be just

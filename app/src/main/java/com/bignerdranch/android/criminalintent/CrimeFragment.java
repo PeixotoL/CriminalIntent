@@ -15,16 +15,43 @@ import android.widget.RadioGroup;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.UUID;
+
 public class CrimeFragment extends Fragment {
+    private static final String ARG_CRIME_ID = "crime_id";
+
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
 
+    //Fragmet Argument
+    public static CrimeFragment newInstance(UUID crimeId){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
-        mCrime = new Crime();
+        //1 - direct shortcut to retrieving the extra & fetching CRIME
+        //mCrime = new Crime();
+        /*getIntent() returns the INTENT that was used to start CrimeActivity
+        . You call getSerializable(String) on the Intent to pull the UUID out
+         into a variable*/
+//        UUID crimeId =
+//                (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        /*after you retrieved the ID, you use it to fetch the Crime from
+        CrimeLab.*/
+//        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+
+        //2 - Getting Crime ID from the arguments
+        UUID crimeId = (UUID)getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
     }
 
     //using onCreateView you explicitly inflate the fragment's view by
@@ -37,6 +64,7 @@ public class CrimeFragment extends Fragment {
 
         //wiring up the EditText to respond to user input
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
+        mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start,
@@ -64,6 +92,7 @@ public class CrimeFragment extends Fragment {
         mDateButton.setEnabled(false);
 
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
